@@ -4,6 +4,11 @@
 #include <functional>
 #include <iostream>
 
+#ifdef WIN32
+# include <io.h>
+# include <fcntl.h>
+#endif
+
 template<class InputIterator, class Size,
          class OutputIterator, class UnaryOperation>
 OutputIterator transform_n(InputIterator first, Size n,
@@ -16,6 +21,13 @@ OutputIterator transform_n(InputIterator first, Size n,
 }
 
 int main(int argc, char** argv) {
+#ifdef WIN32
+  // Set cout to binary.
+  if (_setmode(_fileno(stdout), _O_BINARY) == -1) {
+    std::cerr << "Failed to set cout to binary mode.\n";
+  }
+#endif
+
   if (argc != 2) {
     std::cerr << "l2crypt <input-file>\n";
     return 1;
