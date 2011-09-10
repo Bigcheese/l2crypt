@@ -72,7 +72,10 @@ int main(int argc, char** argv) {
   std::uint8_t key;
   switch (archive_version) {
   case 111: key = 0xAC; break;
-  case 121: key = 0x89; break;
+  case 121:
+    key = file.get();
+    key ^= 0xC1;
+    break;
   default:
     std::cerr << argv[1] << " version " << archive_version
               << " is not currently supported.\n";
